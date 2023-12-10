@@ -4,7 +4,9 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
-
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 class Handler extends ExceptionHandler
 {
     /**
@@ -26,5 +28,27 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        if ($e instanceof MethodNotAllowedHttpException) {
+            return $this->stockResponse($e, 'Неправильный метод',$request,405);
+        }
+        if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException) {
+            return $this->stockResponse($e, 'Не найдено',$request,404);
+        }
+
+        return parent::render($request, $e);
+    }
+
+
+    public function stockResponse($e,$message,$request,$status = 500)
+    {
+        return response()->json([
+            'status' => 'error',
+            'message' => $message,
+            'input' => $request->all(),
+        ], $status);
     }
 }
