@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Auth\AuthenticationException;
 use Throwable;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -38,8 +39,21 @@ class Handler extends ExceptionHandler
         if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException) {
             return $this->stockResponse($e, 'Не найдено',$request,404);
         }
+        if ($e instanceof AuthenticationException) {
+            return $this->unauthenticated($request,$e);
+        }
+
 
         return parent::render($request, $e);
+    }
+
+
+    protected function unauthenticated($request, $exception)
+    {
+        return response()->json([
+                "error"=>"access_denied",
+                "error_description"=>"The resource owner or authorization server denied the request."
+        ],401);
     }
 
 
