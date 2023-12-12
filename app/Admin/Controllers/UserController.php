@@ -56,7 +56,6 @@ class UserController extends AdminController
         $show->field('remember_token', __('Remember token'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
-
         return $show;
     }
 

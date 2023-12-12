@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -56,6 +57,7 @@ class ProductController extends AdminController
         $show->field('image', __('Image'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
+        $show->field('categories', __('Categories'));
 
         return $show;
     }
@@ -74,6 +76,7 @@ class ProductController extends AdminController
         $form->decimal('price', __('Price'));
         $form->number('quantity', __('Quantity'));
         $form->image('image', __('Image'));
+        $form->multipleSelect('categories', __("Category"))->options(Category::all()->pluck('name', 'id'));
 
         return $form;
     }
