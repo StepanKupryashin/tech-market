@@ -24,11 +24,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix('user')->group(function () {
     Route::post('register', [UserController::class, 'register']);
     Route::post('login', [UserController::class, 'login']);
+    Route::get('basket', [UserController::class, 'getBasket']);
 });
 
 
 Route::prefix('products')->group(function () {
     Route::get('', [ProductController::class, 'index']);
+    Route::get('{productId}', [ProductController::class, 'detail']);
  });
 
 Route::prefix('category')->group(function () {
@@ -38,5 +40,6 @@ Route::prefix('category')->group(function () {
 Route::prefix('orders')->middleware('auth:api')->group(function () {
     Route::get('', [OrderController::class, 'index']);
     Route::post('', [OrderController::class, 'createOrder']);
+    Route::get('{orderId}/warranty', [OrderController::class, 'checkWarranty']);
 
 });

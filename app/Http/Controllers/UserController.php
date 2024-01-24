@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Product;
 
 class UserController extends Controller
 {
@@ -39,5 +40,18 @@ class UserController extends Controller
         ];
 
         return $this->successResponse($data);
+    }
+
+    public function getBasket(Request $request)
+    {
+        $products = json_decode($request->get('products'));
+
+
+        $basket = Product::products($products);
+
+        return $this->successResponse([
+            'count' => count($products),
+            'basket' => $basket
+        ]);
     }
 }

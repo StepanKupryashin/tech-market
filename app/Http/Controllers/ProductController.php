@@ -25,4 +25,10 @@ class ProductController extends Controller
         return $this->successResponse($products);
     }
 
+
+    public function detail(int $productID)
+    {
+        return $this->successResponse(Product::find($productID));
+    }
+
 }

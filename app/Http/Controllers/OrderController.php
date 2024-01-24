@@ -19,7 +19,7 @@ class OrderController extends Controller
     public function createOrder(Request $request)
     {
         $products = $request->get('products');
-        if($products != null) {
+        if ($products != null) {
             $order = Order::create([
                 'user_id' => auth()->id()
             ]);
@@ -32,5 +32,16 @@ class OrderController extends Controller
 
         return $this->failureResponse('Could not create order');
 
+    }
+
+    public function checkWarranty(int $orderId)
+    {
+        $statuses = config('warranty.statuses');
+
+        return $this->successResponse(
+            $statuses[
+                Order::find($orderId)->warranty
+            ]
+        );
     }
 }

@@ -65,6 +65,7 @@ class OrderController extends AdminController
 
         $form->number('user_id', __('User id'));
         $form->number('status', __('Status'));
+        $form->number('warranty', __('Warranty'));
 
         return $form;
     }
