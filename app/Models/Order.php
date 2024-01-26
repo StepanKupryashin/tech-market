@@ -26,9 +26,11 @@ class Order extends Model
 
     public function scopeOrders(Builder $builder, int $userId)
     {
-        return $builder->where(function (Builder $query) use ($userId) {
+        $result = $builder->where(function (Builder $query) use ($userId) {
             $query->where('user_id', $userId);
         })->with('products')->get();
+        $result = $result->each(fn($i) => $i->price = collect($i->products)->sum('price'));
+        return $result;
     }
 
 
